@@ -10,6 +10,8 @@ import SwiftUI
 struct BoardView<Model>: View where Model: BoardViewModel {
     
     @StateObject private var viewModel: Model
+    @State private var selectedCommentID: String?
+    @State private var isCommentOptionViewOpened: Bool = false
     
     init(viewModel: Model) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -31,14 +33,33 @@ struct BoardView<Model>: View where Model: BoardViewModel {
                 
                 LazyVStack {
                     ForEach(viewModel.comments) { comment in
-                        CommentView(comment: comment)
+                        CommentView(comment: comment, isSelected: selectedCommentID == comment.id) {
+                            selectedCommentID = comment.id
+                            isCommentOptionViewOpened.toggle()
+                        }
                             .onAppear {
                                 if comment == viewModel.comments.last {
                                     viewModel.requestComment(needReset: false)
                                 }
                             }
+                            .confirmationDialog("CommentMoreButton", isPresented: $isCommentOptionViewOpened) {
+                                if comment.isUserCreate {
+                                    Button("Modify") {
+                                        print("did tap modify button")
+                                    }
+                                    
+                                    Button("Delete") {
+                                        print("did tap delete button")
+                                    }
+                                } else {
+                                    Button("Report") {
+                                        print("did tap report Button")
+                                    }
+                                }
+                            }
                     }
                 }
+                
                 
                 
             }
@@ -58,6 +79,8 @@ struct BoardView<Model>: View where Model: BoardViewModel {
 struct CommentView: View {
     
     let comment: BoardComment
+    let isSelected: Bool
+    let onMoreTapped: () -> Void
     
     @State private var isCommentOptionViewOpened: Bool = false
     
@@ -73,8 +96,7 @@ struct CommentView: View {
                             .bold()
                         Spacer()
                         Button(action: {
-                            print("did tap more button")
-                            isCommentOptionViewOpened.toggle()
+                            onMoreTapped()
                         }, label: {
                             Image(systemName: "ellipsis")
                                 .tint(.gray)
@@ -88,21 +110,6 @@ struct CommentView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
-        .confirmationDialog("CommentMoreButton", isPresented: $isCommentOptionViewOpened) {
-            if comment.isUserCreate {
-                Button("Modify") {
-                    print("did tap modify button")
-                }
-                
-                Button("Delete") {
-                    print("did tap delete button")
-                }
-            } else {
-                Button("Report") {
-                    print("did tap report Button")
-                }
-            }
-        }
     }
 }
 

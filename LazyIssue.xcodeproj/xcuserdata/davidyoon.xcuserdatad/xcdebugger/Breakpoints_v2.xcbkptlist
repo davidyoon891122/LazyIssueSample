@@ -18,6 +18,38 @@
             endingLineNumber = "51"
             landmarkName = "requestComment(needReset:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "35C96C77-ECD8-4409-B387-637812D530D8 - 4dde9486b42e54ac"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in LazyIssue.BoardViewModel.requestComment(needReset: Swift.Bool) -&gt; ()"
+                  moduleName = "LazyIssue"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/davidyoon/iOSProject/LazyIssue/LazyIssue/Board/BoardViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "35C96C77-ECD8-4409-B387-637812D530D8 - 4dde9486b42e54ac"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in LazyIssue.BoardViewModel.requestComment(needReset: Swift.Bool) -&gt; ()"
+                  moduleName = "LazyIssue"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/davidyoon/iOSProject/LazyIssue/LazyIssue/Board/BoardViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "208">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
