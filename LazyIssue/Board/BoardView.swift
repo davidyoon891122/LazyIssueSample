@@ -10,6 +10,8 @@ import SwiftUI
 struct BoardView<Model>: View where Model: BoardViewModel {
     
     @StateObject private var viewModel: Model
+    @State private var selectedCommentID: String? // 선택된 댓글의 ID를 저장
+    @State private var isCommentOptionViewOpened: Bool = false
     
     init(viewModel: Model) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -29,23 +31,13 @@ struct BoardView<Model>: View where Model: BoardViewModel {
                 }
                 .padding(.vertical)
                 
-                //정상 동작
-//                ForEach(viewModel.comments) { comment in
-//                    LazyVStack {
-//                        CommentView(comment: comment)
-//                            .id(comment.commentId)
-//                            .onAppear {
-//                                if comment == viewModel.comments.last {
-//                                    viewModel.requestComment(needReset: false)
-//                                }
-//                            }
-//                    }
-//                }
-                
                 // 레이지하게 생성된 CommetView 비정상(하지만 이게 정상적인 사용 방식이다)
                 LazyVStack {
                     ForEach(viewModel.comments) { comment in
-                        CommentView(comment: comment)
+                        CommentView(comment: comment, isOptionViewOpened: selectedCommentID == comment.id, onOptionTap: {
+                            selectedCommentID = comment.id
+                            isCommentOptionViewOpened = true
+                        })
                             .onAppear {
                                 if comment == viewModel.comments.last {
                                     viewModel.requestComment(needReset: false)
@@ -53,16 +45,34 @@ struct BoardView<Model>: View where Model: BoardViewModel {
                             }
                     }
                 }
-                
-                
-                
-                
-                
             }
         }
         .onAppear {
             viewModel.requestBoard()
             viewModel.requestComment(needReset: true)
+        }
+        .confirmationDialog("CommentMoreButton", isPresented: $isCommentOptionViewOpened) {
+            if let selectedComment = viewModel.comments.first(where: { $0.id == selectedCommentID }) {
+                if selectedComment.isUserCreate {
+                    Button("Modify") {
+                        print("did tap modify button")
+                        print(selectedComment.isUserCreate)
+                        print(selectedComment.id)
+                    }
+                    
+                    Button("Delete") {
+                        print("did tap delete button")
+                        print(selectedComment.isUserCreate)
+                        print(selectedComment.id)
+                    }
+                } else {
+                    Button("Report") {
+                        print("did tap report Button")
+                        print(selectedComment.isUserCreate)
+                        print(selectedComment.id)
+                    }
+                }
+            }
         }
     }
     
@@ -75,6 +85,8 @@ struct BoardView<Model>: View where Model: BoardViewModel {
 struct CommentView: View {
     
     let comment: BoardComment
+    let isOptionViewOpened: Bool
+    let onOptionTap: () -> Void
     
     @State private var isCommentOptionViewOpened: Bool = false
     
@@ -90,7 +102,7 @@ struct CommentView: View {
                             .bold()
                         Spacer()
                         Button(action: {
-                            isCommentOptionViewOpened.toggle()
+                            onOptionTap()
                         }, label: {
                             Image(systemName: "ellipsis")
                                 .tint(.gray)
@@ -104,27 +116,6 @@ struct CommentView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
-        .confirmationDialog("CommentMoreButton", isPresented: $isCommentOptionViewOpened) {
-            if comment.isUserCreate {
-                Button("Modify") {
-                    print("did tap modify button")
-                    print(comment.isUserCreate)
-                    print(comment.id)
-                }
-                
-                Button("Delete") {
-                    print("did tap delete button")
-                    print(comment.isUserCreate)
-                    print(comment.id)
-                }
-            } else {
-                Button("Report") {
-                    print("did tap report Button")
-                    print(comment.isUserCreate)
-                    print(comment.id)
-                }
-            }
-        }
     }
 }
 
